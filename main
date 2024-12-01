@@ -1,0 +1,24 @@
+# Import PuLP library
+from pulp import LpMaximize, LpProblem, LpVariable, lpSum
+
+# Define the problem
+problem = LpProblem("Maximize_Profit", LpMaximize)
+
+# Define decision variables (amount of resources allocated)
+x1 = LpVariable("x1", lowBound=0, cat='Continuous')  # Resource 1
+x2 = LpVariable("x2", lowBound=0, cat='Continuous')  # Resource 2
+
+# Objective function: Maximize profit (profit per unit for each resource)
+problem += 40*x1 + 30*x2, "Profit"
+
+# Constraints
+problem += 2*x1 + 3*x2 <= 60, "Resource_1_Constraint"
+problem += 4*x1 + x2 <= 40, "Resource_2_Constraint"
+
+# Solve the problem
+problem.solve()
+
+# Output results
+print(f"Optimal amount of Resource 1 (x1): {x1.varValue}")
+print(f"Optimal amount of Resource 2 (x2): {x2.varValue}")
+print(f"Maximum Profit: {problem.objective.value()}")
